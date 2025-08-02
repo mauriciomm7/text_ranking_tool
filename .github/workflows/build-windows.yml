@@ -48,11 +48,11 @@ jobs:
           mkdir devroot\internal_exports
           mkdir devroot\internal_users
           
-          # Create .gitkeep files to preserve empty directories
-          echo "# This file ensures the directory is preserved in archives" > devroot\external_exports\.gitkeep
-          echo "# This file ensures the directory is preserved in archives" > devroot\internal_data\.gitkeep
-          echo "# This file ensures the directory is preserved in archives" > devroot\internal_exports\.gitkeep
-          echo "# This file ensures the directory is preserved in archives" > devroot\internal_users\.gitkeep
+          # Create .gitkeep files to preserve empty directories (using Set-Content)
+          Set-Content -Path devroot\external_exports\.gitkeep -Value "# This file ensures the directory is preserved in archives"
+          Set-Content -Path devroot\internal_data\.gitkeep -Value "# This file ensures the directory is preserved in archives"
+          Set-Content -Path devroot\internal_exports\.gitkeep -Value "# This file ensures the directory is preserved in archives"
+          Set-Content -Path devroot\internal_users\.gitkeep -Value "# This file ensures the directory is preserved in archives"
           
           # Copy config to root level (correct)
           copy ..\..\..\config.json .
@@ -62,9 +62,15 @@ jobs:
           if (Test-Path ..\..\..\devroot\external_data\*.csv) {
             Copy-Item ..\..\..\devroot\external_data\*.csv devroot\external_data\
           }
-      
-    - name: Upload complete Windows package
+
+    - name: Zip distribution package
+      shell: pwsh
+      run: |
+        cd packaging/windows
+        Compress-Archive -Path dist\* -DestinationPath dist.zip      
+
+    - name: Upload zipped Windows package
       uses: actions/upload-artifact@v4
       with:
-        name: TextRankingTool-Windows-v${{ steps.get_version.outputs.VERSION }}-Complete
-        path: packaging/windows/dist/
+        name: TextRankingTool-Windows-${{ steps.get_version.outputs.VERSION }}-Complete
+        path: packaging/windows/dist.zip

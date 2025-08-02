@@ -24,10 +24,10 @@ jobs:
         pip install -r requirements.txt
         
     - name: Read version number
-      id: version
+      id: get_version
       run: |
         VERSION=$(cat version.txt)
-        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
         
     - name: Build Mac executable (single arch)
       run: |
@@ -59,8 +59,13 @@ jobs:
           cp "$f" devroot/external_data/
         done
         
-    - name: Upload complete Mac package
+    - name: Zip distribution package
+      run: |
+        cd packaging/mac
+        zip -r dist.zip dist
+        
+    - name: Upload zipped Mac package
       uses: actions/upload-artifact@v4
       with:
-        name: TextRankingTool-Mac-v${{ steps.version.outputs.version }}-Complete
-        path: packaging/mac/dist/
+        name: TextRankingTool-Mac-${{ steps.get_version.outputs.VERSION }}-Complete
+        path: packaging/mac/dist.zip
