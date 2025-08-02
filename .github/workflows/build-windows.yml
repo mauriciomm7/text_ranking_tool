@@ -36,16 +36,17 @@ jobs:
         pyinstaller text_ranking_tool_windows.spec
 
     - name: Create distribution package
+      shell: pwsh
       run: |
-        cd packaging/windows/dist
-        mkdir external_data external_exports internal_data internal_exports internal_users
-
-        copy ..\..\..\config.json .
-
-        if exist ..\..\..\devroot\external_data\*.csv (
-          copy ..\..\..\devroot\external_data\*.csv external_data\
-        )
-
+          cd packaging/windows/dist
+          mkdir external_data external_exports internal_data internal_exports internal_users
+      
+          copy ..\..\..\config.json .
+      
+          if (Test-Path ..\..\..\devroot\external_data\*.csv) {
+            Copy-Item ..\..\..\devroot\external_data\*.csv external_data\
+          }
+      
     - name: Upload complete Windows package
       uses: actions/upload-artifact@v4
       with:
