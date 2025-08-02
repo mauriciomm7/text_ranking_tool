@@ -4,20 +4,25 @@ block_cipher = None
 
 a = Analysis(
     ['launcher.py'],
-    pathex=['../../src'],  # ← Go back two levels to find src
+    pathex=['../../src'],
     binaries=[],
     datas=[
-        ('../../src/text_ranking_tool/config', 'text_ranking_tool/config'),      # ← Back to project root
-        ('../../src/text_ranking_tool/algorithms', 'text_ranking_tool/algorithms'), # ← Back to project root
-        ('../../mock_installer_config.json', '.'),                              # ← Back to project root
+        ('../../src/text_ranking_tool/config', 'text_ranking_tool/config'),
+        ('../../src/text_ranking_tool/algorithms', 'text_ranking_tool/algorithms'),
+        ('../../config.json', '.'),                        
     ],
     hiddenimports=[
         'pandas', 
         'numpy', 
         'rich', 
         'scipy.stats',
+        'scipy',
         'text_ranking_tool',
         'text_ranking_tool.main',
+        'text_ranking_tool.config',
+        'text_ranking_tool.algorithms',
+        'text_ranking_tool.algorithms.recursive_median',
+        'text_ranking_tool.algorithms.tournament',
         'text_ranking_tool.algorithms.recursive_median.recursive_median_core',
         'text_ranking_tool.algorithms.tournament.tournament_core',
     ],
@@ -44,7 +49,7 @@ exe = EXE(
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=False,  # ← Also changed to False for better performance as discussed
+    upx=False,
     upx_exclude=[],
     runtime_tmpdir=None,
     console=True,

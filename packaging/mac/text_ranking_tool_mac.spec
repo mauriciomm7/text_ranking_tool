@@ -9,7 +9,7 @@ a = Analysis(
     datas=[
         ('../../src/text_ranking_tool/config', 'text_ranking_tool/config'),
         ('../../src/text_ranking_tool/algorithms', 'text_ranking_tool/algorithms'),
-        ('../../mock_installer_config.json', '.'),
+        ('../../config.json', '.'),
     ],
     hiddenimports=[
         'pandas', 
