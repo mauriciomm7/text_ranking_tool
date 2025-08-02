@@ -40,6 +40,10 @@ jobs:
 
         # Always create the directory structure
         mkdir -p external_data external_exports internal_data internal_exports internal_users
+        
+        # Debug: list created directories
+        echo "Directories after mkdir:"
+        ls -ld external_data external_exports internal_data internal_exports internal_users
 
         # Copy config and version info
         cp ../../../config.json .

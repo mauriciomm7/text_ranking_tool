@@ -25,11 +25,11 @@ jobs:
 
     - name: Read version from file
       id: get_version
-      shell: bash
+      shell: pwsh
       run: |
-        VERSION=$(cat version.txt)
-        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-
+        $version = Get-Content version.txt
+        echo "VERSION=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+      
     - name: Build Windows executable
       run: |
         cd packaging/windows
@@ -39,7 +39,12 @@ jobs:
       shell: pwsh
       run: |
           cd packaging/windows/dist
-          mkdir external_data external_exports internal_data internal_exports internal_users
+          # Create directories (one per line)
+          mkdir external_data
+          mkdir external_exports
+          mkdir internal_data 
+          mkdir internal_exports
+          mkdir internal_users
       
           copy ..\..\..\config.json .
       
