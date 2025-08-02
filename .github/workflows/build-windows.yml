@@ -48,6 +48,12 @@ jobs:
           mkdir devroot\internal_exports
           mkdir devroot\internal_users
           
+          # Create .gitkeep files to preserve empty directories
+          echo "# This file ensures the directory is preserved in archives" > devroot\external_exports\.gitkeep
+          echo "# This file ensures the directory is preserved in archives" > devroot\internal_data\.gitkeep
+          echo "# This file ensures the directory is preserved in archives" > devroot\internal_exports\.gitkeep
+          echo "# This file ensures the directory is preserved in archives" > devroot\internal_users\.gitkeep
+          
           # Copy config to root level (correct)
           copy ..\..\..\config.json .
           copy ..\..\..\version.txt .

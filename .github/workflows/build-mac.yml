@@ -41,10 +41,12 @@ jobs:
         # Create devroot directory structure
         mkdir -p devroot/external_data devroot/external_exports devroot/internal_data devroot/internal_exports devroot/internal_users
         
-        # Debug: list created directories
-        echo "Directories after mkdir:"
-        ls -la devroot/
-        
+        # Create .gitkeep files to preserve empty directories
+        echo "# This file ensures the directory is preserved in archives" > devroot/external_exports/.gitkeep
+        echo "# This file ensures the directory is preserved in archives" > devroot/internal_data/.gitkeep
+        echo "# This file ensures the directory is preserved in archives" > devroot/internal_exports/.gitkeep
+        echo "# This file ensures the directory is preserved in archives" > devroot/internal_users/.gitkeep
+
         # Copy config and version info to root level
         cp ../../../config.json .
         cp ../../../version.txt .
