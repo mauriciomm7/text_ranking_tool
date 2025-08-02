@@ -10,7 +10,7 @@ DEBUG = False
 
 # Simple config file detection - PyInstaller compatible
 if getattr(sys, 'frozen', False):
-    CONFIG_FILE = Path(sys.executable).parent / "text_ranking_config.json"
+    CONFIG_FILE = Path(sys.executable).parent / "config.json"
 else:
     CONFIG_FILE = Path("mock_installer_config.json")
 

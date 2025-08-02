@@ -32,7 +32,6 @@ Thumbs.db
 desktop.ini
 
 # User data (preserve structure, not content)
-devroot/external_data/*.csv
 devroot/internal_data/*
 devroot/external_exports/*
 devroot/internal_exports/*

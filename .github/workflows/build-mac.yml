@@ -28,8 +28,22 @@ jobs:
         cd packaging/mac
         pyinstaller text_ranking_tool_mac.spec
         
-    - name: Upload Mac executable
+    - name: Create distribution package
+      run: |
+        cd packaging/mac/dist
+        # Create directory structure
+        mkdir -p external_data external_exports internal_data internal_exports internal_users
+        
+        # Copy config file
+        cp ../../../config.json .
+        
+        # Add sample CSV files if they exist in devroot
+        if [ -f ../../../devroot/external_data/*.csv ]; then
+          cp ../../../devroot/external_data/*.csv external_data/
+        fi
+        
+    - name: Upload complete Mac package
       uses: actions/upload-artifact@v4
       with:
-        name: TextRankingTool-Mac-v1.0
-        path: packaging/mac/dist/TextRankingTool
+        name: TextRankingTool-Mac-v1.0-Complete
+        path: packaging/mac/dist/

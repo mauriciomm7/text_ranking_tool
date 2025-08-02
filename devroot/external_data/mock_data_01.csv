@@ -1,0 +1,11 @@
+id,valence,ranking,text
+T001,0.95,10,"Text 10: This is the most positive and amazing experience ever!"
+T002,0.75,9,"Text 9: This is really good and quite satisfactory overall"
+T003,0.55,8,"Text 8: This is pretty decent and fairly nice to experience"
+T004,0.35,7,"Text 7: This is somewhat okay but nothing particularly special"
+T005,0.15,6,"Text 6: This is mediocre and just barely acceptable quality"
+T006,-0.05,5,"Text 5: This is slightly disappointing and not very great"
+T007,-0.25,4,"Text 4: This is rather poor and quite unsatisfactory overall"
+T008,-0.45,3,"Text 3: This is pretty bad and very disappointing experience"
+T009,-0.65,2,"Text 2: This is really awful and completely terrible quality"
+T010,-0.85,1,"Text 1: This is the most negative and horrible experience possible"

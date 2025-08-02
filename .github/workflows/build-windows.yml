@@ -28,8 +28,22 @@ jobs:
         cd packaging/windows
         pyinstaller text_ranking_tool_windows.spec
         
-    - name: Upload Windows executable
+    - name: Create distribution package
+      run: |
+        cd packaging/windows/dist
+        # Create directory structure
+        mkdir external_data external_exports internal_data internal_exports internal_users
+        
+        # Copy config file
+        copy ..\..\..\config.json .
+        
+        # Add sample CSV files if they exist in devroot
+        if exist ..\..\..\devroot\external_data\*.csv (
+          copy ..\..\..\devroot\external_data\*.csv external_data\
+        )
+        
+    - name: Upload complete Windows package
       uses: actions/upload-artifact@v4
       with:
-        name: TextRankingTool-Windows-v1.0
-        path: packaging/windows/dist/TextRankingTool.exe
+        name: TextRankingTool-Windows-v1.0-Complete
+        path: packaging/windows/dist/
