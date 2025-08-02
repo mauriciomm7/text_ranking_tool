@@ -45,3 +45,7 @@ devroot/internal_users/*
 # PyInstaller spec warnings
 *.spec.bak
 warn-*.txt
+
+# TODO
+TODO.md
+20250802_deployment.txt

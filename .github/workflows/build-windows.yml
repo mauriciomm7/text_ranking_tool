@@ -39,17 +39,22 @@ jobs:
       shell: pwsh
       run: |
           cd packaging/windows/dist
-          # Create directories (one per line)
-          mkdir external_data
-          mkdir external_exports
-          mkdir internal_data 
-          mkdir internal_exports
-          mkdir internal_users
-      
+          
+          # Create devroot directory structure (correct)
+          mkdir devroot
+          mkdir devroot\external_data
+          mkdir devroot\external_exports
+          mkdir devroot\internal_data 
+          mkdir devroot\internal_exports
+          mkdir devroot\internal_users
+          
+          # Copy config to root level (correct)
           copy ..\..\..\config.json .
-      
+          copy ..\..\..\version.txt .
+          
+          # Copy sample CSVs to devroot\external_data (correct)
           if (Test-Path ..\..\..\devroot\external_data\*.csv) {
-            Copy-Item ..\..\..\devroot\external_data\*.csv external_data\
+            Copy-Item ..\..\..\devroot\external_data\*.csv devroot\external_data\
           }
       
     - name: Upload complete Windows package
