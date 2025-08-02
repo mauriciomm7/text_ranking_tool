@@ -178,7 +178,8 @@ GitHub: [@mauriciomm7](https://github.com/mauriciomm7)
 If you use this tool in academic research, please cite:
 
 > **Mandujano Manríquez, M.** (2025). *Text Ranking Tool: Academic research tool for ranking text data using recursive median and tournament algorithms*.
-> GitHub: [https://github.com/mauriciomm7/text\_ranking\_tool](https://github.com/mauriciomm7/text_ranking_tool)
+> GitHub: [https://github.com/mauriciomm7/text_ranking_tool](https://github.com/mauriciomm7/text_ranking_tool)
+
 
 ```bibtex
 @misc{mandujano2025text,

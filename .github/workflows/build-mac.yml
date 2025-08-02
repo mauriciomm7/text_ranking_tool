@@ -8,42 +8,53 @@ on:
 jobs:
   build-mac:
     runs-on: macos-latest
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
+
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-        
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        
+
+    - name: Read version number
+      id: version
+      run: |
+        VERSION=$(cat version.txt)
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
     - name: Build Mac executable (single arch)
       run: |
         cd packaging/mac
         pyinstaller text_ranking_tool_mac.spec
-        
+
     - name: Create distribution package
       run: |
         cd packaging/mac/dist
-        # Create directory structure
+
+        # Always create the directory structure
         mkdir -p external_data external_exports internal_data internal_exports internal_users
-        
-        # Copy config file
+
+        # Copy config and version info
         cp ../../../config.json .
-        
-        # Add sample CSV files if they exist in devroot
-        if [ -f ../../../devroot/external_data/*.csv ]; then
-          cp ../../../devroot/external_data/*.csv external_data/
-        fi
-        
+        cp ../../../version.txt .
+
+        # Enable nullglob so non-matching globs expand to nothing
+        shopt -s nullglob
+
+        # Copy sample CSVs if any exist
+        for f in ../../../devroot/external_data/*.csv; do
+          cp "$f" external_data/
+        done
+
     - name: Upload complete Mac package
       uses: actions/upload-artifact@v4
       with:
-        name: TextRankingTool-Mac-v1.0-Complete
+        name: TextRankingTool-Mac-v${{ steps.version.outputs.version }}-Complete
         path: packaging/mac/dist/

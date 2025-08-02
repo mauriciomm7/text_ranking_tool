@@ -1,49 +1,53 @@
 name: Build Windows Executable
 
 on:
-  workflow_dispatch:  # Manual trigger
+  workflow_dispatch:
   push:
     branches: [ main ]
 
 jobs:
   build-windows:
     runs-on: windows-latest
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      
+
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-        
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        
+
+    - name: Read version from file
+      id: get_version
+      shell: bash
+      run: |
+        VERSION=$(cat version.txt)
+        echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
     - name: Build Windows executable
       run: |
         cd packaging/windows
         pyinstaller text_ranking_tool_windows.spec
-        
+
     - name: Create distribution package
       run: |
         cd packaging/windows/dist
-        # Create directory structure
         mkdir external_data external_exports internal_data internal_exports internal_users
-        
-        # Copy config file
+
         copy ..\..\..\config.json .
-        
-        # Add sample CSV files if they exist in devroot
+
         if exist ..\..\..\devroot\external_data\*.csv (
-          copy ..\..\..\devroot\external_data\*.csv external_data\ 
-          )
-        
+          copy ..\..\..\devroot\external_data\*.csv external_data\
+        )
+
     - name: Upload complete Windows package
       uses: actions/upload-artifact@v4
       with:
-        name: TextRankingTool-Windows-v1.0-Complete
+        name: TextRankingTool-Windows-v${{ steps.get_version.outputs.VERSION }}-Complete
         path: packaging/windows/dist/
