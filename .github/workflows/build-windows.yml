@@ -38,39 +38,39 @@ jobs:
     - name: Create distribution package
       shell: pwsh
       run: |
-          cd packaging/windows/dist
-          
-          # Create devroot directory structure (correct)
-          mkdir devroot
-          mkdir devroot\external_data
-          mkdir devroot\external_exports
-          mkdir devroot\internal_data 
-          mkdir devroot\internal_exports
-          mkdir devroot\internal_users
-          
-          # Create .gitkeep files to preserve empty directories (using Set-Content)
-          Set-Content -Path devroot\external_exports\.gitkeep -Value "# This file ensures the directory is preserved in archives"
-          Set-Content -Path devroot\internal_data\.gitkeep -Value "# This file ensures the directory is preserved in archives"
-          Set-Content -Path devroot\internal_exports\.gitkeep -Value "# This file ensures the directory is preserved in archives"
-          Set-Content -Path devroot\internal_users\.gitkeep -Value "# This file ensures the directory is preserved in archives"
-          
-          # Copy config to root level (correct)
-          copy ..\..\..\config.json .
-          copy ..\..\..\version.txt .
-          
-          # Copy sample CSVs to devroot\external_data (correct)
-          if (Test-Path ..\..\..\devroot\external_data\*.csv) {
-            Copy-Item ..\..\..\devroot\external_data\*.csv devroot\external_data\
-          }
+        cd packaging/windows/dist
+        
+        # Create devroot directory structure
+        mkdir devroot
+        mkdir devroot\external_data
+        mkdir devroot\external_exports
+        mkdir devroot\internal_data
+        mkdir devroot\internal_exports
+        mkdir devroot\internal_users
+        
+        # Create .gitkeep files to preserve empty directories
+        Set-Content -Path devroot\external_exports\.gitkeep -Value "# This file ensures the directory is preserved in archives"
+        Set-Content -Path devroot\internal_data\.gitkeep -Value "# This file ensures the directory is preserved in archives"
+        Set-Content -Path devroot\internal_exports\.gitkeep -Value "# This file ensures the directory is preserved in archives"
+        Set-Content -Path devroot\internal_users\.gitkeep -Value "# This file ensures the directory is preserved in archives"
+        
+        # Copy config to root level
+        copy ..\..\..\config.json .
+        copy ..\..\..\version.txt .
+        
+        # Copy sample CSVs to devroot\external_data if any exist
+        if (Test-Path ..\..\..\devroot\external_data\*.csv) {
+          Copy-Item ..\..\..\devroot\external_data\*.csv devroot\external_data\
+        }
 
     - name: Zip distribution package
       shell: pwsh
       run: |
-        cd packaging/windows
-        Compress-Archive -Path dist\* -DestinationPath dist.zip      
+        cd packaging/windows/dist
+        Compress-Archive -Path * -DestinationPath ../TextRankingTool-Windows-${{ steps.get_version.outputs.VERSION }}-Complete.zip
 
     - name: Upload zipped Windows package
       uses: actions/upload-artifact@v4
       with:
         name: TextRankingTool-Windows-${{ steps.get_version.outputs.VERSION }}-Complete
-        path: packaging/windows/dist.zip
+        path: packaging/windows/TextRankingTool-Windows-${{ steps.get_version.outputs.VERSION }}-Complete.zip

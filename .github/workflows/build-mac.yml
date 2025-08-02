@@ -61,11 +61,11 @@ jobs:
         
     - name: Zip distribution package
       run: |
-        cd packaging/mac
-        zip -r dist.zip dist
-        
+        cd packaging/mac/dist
+        zip -r ../TextRankingTool-Mac-${{ steps.get_version.outputs.VERSION }}-Complete.zip *
+
     - name: Upload zipped Mac package
       uses: actions/upload-artifact@v4
       with:
         name: TextRankingTool-Mac-${{ steps.get_version.outputs.VERSION }}-Complete
-        path: packaging/mac/dist.zip
+        path: packaging/mac/TextRankingTool-Mac-${{ steps.get_version.outputs.VERSION }}-Complete.zip
