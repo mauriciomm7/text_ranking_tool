@@ -39,8 +39,8 @@ jobs:
         
         # Add sample CSV files if they exist in devroot
         if exist ..\..\..\devroot\external_data\*.csv (
-          copy ..\..\..\devroot\external_data\*.csv external_data\
-        )
+          copy ..\..\..\devroot\external_data\*.csv external_data\ 
+          )
         
     - name: Upload complete Windows package
       uses: actions/upload-artifact@v4
