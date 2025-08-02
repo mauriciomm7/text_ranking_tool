@@ -1,0 +1,48 @@
+# Virtual environments
+test_env/
+venv/
+env/
+*.venv
+
+# Build artifacts
+packaging/windows/build/
+packaging/windows/dist/
+packaging/mac/build/
+packaging/mac/dist/
+build/
+dist/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# User data (preserve structure, not content)
+devroot/external_data/*.csv
+devroot/internal_data/*
+devroot/external_exports/*
+devroot/internal_exports/*
+devroot/internal_users/*
+
+# Logs and temp files
+*.log
+*.tmp
+*.temp
+
+# PyInstaller spec warnings
+*.spec.bak
+warn-*.txt

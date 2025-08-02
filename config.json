@@ -1,0 +1,22 @@
+{
+  "install_root": "./",
+  "external_data_dir": "devroot/external_data",
+  "internal_data_dir": "devroot/internal_data", 
+  "external_export_dir": "devroot/external_exports",
+  "internal_export_dir": "devroot/internal_exports",
+  "internal_users_dir": "devroot/internal_users",
+  "algorithm": "recursive_median",
+  "available_algorithms": ["recursive_median", "tournament"],
+  "default_algorithm": "recursive_median",
+  "user_mapping": {
+      "Mauricio MM": "MauricioMM",
+      "User Beta": "UserBeta",
+      "User Alpha": "UserAlpha"
+  },
+  "user_colors": {
+    "Mauricio MM": "bright_blue",
+      "User Beta": "bright_magenta",
+      "User Alpha": "bright_green"
+  },
+  "required_columns": ["id", "valence", "ranking", "text"]
+}

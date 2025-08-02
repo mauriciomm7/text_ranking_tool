@@ -1,0 +1,15 @@
+# Core Application Dependencies
+rich>=13.0.0
+pandas>=1.5.0
+scipy>=1.9.0
+
+# Packaging Dependencies  
+pyinstaller>=5.13.0
+setuptools>=68.0.0
+wheel>=0.41.0
+
+# Optional: Future features
+requests>=2.31.0
+
+# Development/Testing (optional)
+pytest>=7.4.0
