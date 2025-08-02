@@ -26,16 +26,19 @@ For developers who want to modify or contribute:
    ```bash
    git clone https://github.com/mauriciomm7/text_ranking_tool.git
    ```
+
 2. **Install dependencies**:
 
    ```bash
    pip install -r requirements.txt
    ```
+
 3. **Run the app**:
 
    ```bash
    python src/text_ranking_tool/main.py
    ```
+
 4. Use the `devroot/` structure for input/output during development.
 
 📖 [**Developer Guide →**](docs/DEVELOPER_GUIDE.md)
