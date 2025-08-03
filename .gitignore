@@ -49,3 +49,4 @@ warn-*.txt
 # TODO
 TODO.md
 20250802_deployment.txt
+dev_config.json

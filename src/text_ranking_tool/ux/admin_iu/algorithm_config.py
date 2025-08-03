@@ -10,7 +10,7 @@ import os
 import json
 from .admin_main_ui import get_admin_choice_with_navigation, handle_navigation_action
 from ...config.constants import (get_available_algorithms, 
-                                 CONFIGURED_ALGORITHM, 
+                                 get_configured_algorithm, 
                                  set_algorithm, 
                                  CONFIG_FILE,
                                  _config)
@@ -22,13 +22,14 @@ def algorithm_config_mode():
     while True:
         _clear_screen()
         console.print(Panel("⚙️ Algorithm Configuration", style="bold yellow"))
-        console.print(f"Current: [green]{CONFIGURED_ALGORITHM}[/green]")
+        current_algo = get_configured_algorithm()
+        console.print(f"Current: [green]{current_algo}[/green]")
         console.print()
         
         # List algorithms
         algorithms = get_available_algorithms()
         for i, algo in enumerate(algorithms, 1):
-            status = " ✅" if algo == CONFIGURED_ALGORITHM else ""
+            status = " ✅" if algo == current_algo else ""
             console.print(f"[{i}] {algo}{status}")
         
         choices = [str(i) for i in range(1, len(algorithms) + 1)]
@@ -49,7 +50,9 @@ def algorithm_config_mode():
 
 def _switch_algorithm(console, algorithm_id):
     """Switch algorithm with session/permanent choice"""
-    if algorithm_id == CONFIGURED_ALGORITHM:
+    global _config  # needed since we assign to _config inside
+    current_algo = get_configured_algorithm()
+    if algorithm_id == current_algo:
         console.print(f"[yellow]{algorithm_id} is already current[/yellow]")
         Prompt.ask("Press Enter")
         return

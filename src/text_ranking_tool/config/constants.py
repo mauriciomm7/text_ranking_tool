@@ -12,7 +12,7 @@ DEBUG = False
 if getattr(sys, 'frozen', False):
     CONFIG_FILE = Path(sys.executable).parent / "config.json"
 else:
-    CONFIG_FILE = Path("mock_installer_config.json")
+    CONFIG_FILE = Path(__file__).parents[3] / "dev_config.json"
 
 def load_config() -> Dict[str, Any]:
     """Load configuration from JSON file - NO DEFAULTS"""
@@ -74,6 +74,12 @@ def set_algorithm(algorithm_name: str) -> bool:
 def get_available_algorithms() -> list:
     """Get list of available algorithms."""
     return AVAILABLE_ALGORITHMS.copy()
+
+def get_configured_algorithm() -> str:
+    """Get the current configured algorithm - always returns latest value"""
+    global CONFIGURED_ALGORITHM
+    return CONFIGURED_ALGORITHM
+
 
 def save_config_to_file():
     """Save current config back to JSON file"""

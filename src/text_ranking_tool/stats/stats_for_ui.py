@@ -57,17 +57,20 @@ class StatsForUI:
         if machine_file.exists():
             participants_data['Machine'] = StatsForUI.load_machine_ranking_from_csv(machine_file)
         
-        # Load human rankings
+        # LOAD human rankings
         for display_name, user_id in user_mapping.items():
-            # Find export file for this user and dataset
+            # FIND export file for this user and dataset inside INTERNAL_EXPORTS_DIR
             pattern = f"{user_id}_{dataset_stem}_*.csv"
             matching_files = list(internal_exports_dir.glob(pattern))
             
             if matching_files:
-                # Use most recent file if multiple exist
+                # USE most recent file if multiple exist
                 latest_file = max(matching_files, key=lambda f: f.stat().st_mtime)
                 participants_data[display_name] = StatsForUI.load_ranking_from_export_csv(latest_file)
-        
+                # PRINT warning
+                print(f"\033[1;38;5;208m⚠ {display_name}\033[0m has multiple exports for dataset " 
+                      f"\033[1;38;5;208m{dataset_stem}\033[0m. Using latest: {latest_file.name}\n")
+                
         return participants_data
 
     @staticmethod

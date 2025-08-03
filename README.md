@@ -17,72 +17,6 @@ For researchers who want to **run** the tool:
 
 ---
 
-## 🧑‍💻 Developer Setup
-
-For contributors or those modifying the source:
-
-1. **Clone the repo**:
-
-   ```bash
-   git clone https://github.com/mauriciomm7/text_ranking_tool.git
-   cd text_ranking_tool
-   ```
-
-2. **Install dependencies**:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Run the app**:
-
-   ```bash
-   python src/text_ranking_tool/main.py
-   ```
-
-4. Use the `devroot/` directory for test input/output during development.
-
-📖 [**Developer Guide →**](docs/DEVELOPER_GUIDE.md)
-
----
-
-## 🧭 Project Structure
-
-```shell
-text_ranking_tool/
-├── src/
-│   └── text_ranking_tool/
-│       ├── algorithms/     # Ranking algorithms (recursive, tournament)
-│       ├── analysis/       # CLI analysis interface
-│       ├── config/         # Settings, constants
-│       ├── data/           # CSV/data loaders
-│       ├── export/         # Export formats (CSV, JSON, etc.)
-│       ├── ranking/        # Core logic for pairwise ranking
-│       ├── stats/          # Statistics and scoring
-│       ├── utils/          # Utility helpers
-│       ├── ux/             # CLI UX components (Rich)
-│       ├── validation/     # Schema and input checks
-│       └── main.py         # CLI entry point
-│
-├── packaging/              # Build configs
-│   ├── windows/
-│   └── mac/
-│
-├── devroot/                # Local test environment
-│   ├── external_data/      # Sample input data
-│   ├── external_exports/   # Output from experiments
-│   └── config.json         # Dev-time override config
-│
-├── .github/workflows/      # GitHub Actions CI/CD
-├── config.json             # Global runtime config
-├── requirements.txt        # Python dependencies
-├── .gitignore
-├── LICENSE                 # ✅ MIT License
-└── README.md
-```
-
----
-
 ## 📦 Distribution Layout
 
 After downloading from [Releases](https://github.com/mauriciomm7/text_ranking_tool/releases), the executable bundle includes:
@@ -147,10 +81,82 @@ Each `.csv` file must contain the following columns:
 | `ranking` | Initial ranking score (can be set to 0)    |
 | `text`    | The text snippet to be compared and ranked |
 
+---
+
+## 🧑‍💻 Developer Setup
+
+For contributors or those modifying the source:
+
+1. **Clone the repo**:
+
+   ```bash
+   git clone https://github.com/mauriciomm7/text_ranking_tool.git
+   cd text_ranking_tool
+   ```
+
+2. **Install dependencies**:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Run the app**:
+
+   ```bash
+   python src/text_ranking_tool/main.py
+   ```
+
+4. Use the `devroot/` directory for test input/output during development.
+
+📖 [**Developer Guide →**](docs/DEVELOPER_GUIDE.md)
+
+---
+
+## 🧭 Project Structure
+
+```shell
+text_ranking_tool/
+├── src/
+│   └── text_ranking_tool/
+│       ├── algorithms/     # Ranking algorithms (recursive, tournament)
+│       ├── analysis/       # CLI analysis interface
+│       ├── config/         # Settings, constants
+│       ├── data/           # CSV/data loaders
+│       ├── export/         # Export formats (CSV, JSON, etc.)
+│       ├── ranking/        # Core logic for pairwise ranking
+│       ├── stats/          # Statistics and scoring
+│       ├── utils/          # Utility helpers
+│       ├── ux/             # CLI UX components (Rich)
+│       ├── validation/     # Schema and input checks
+│       └── main.py         # CLI entry point
+│
+├── packaging/              # Build configs
+│   ├── windows/
+│   └── mac/
+│
+├── devroot/                # Local test environment
+│   ├── external_data/      # Sample input data
+│   ├── external_exports/   # Output from experiments
+│   └── config.json         # Dev-time override config
+│
+├── .github/workflows/      # GitHub Actions CI/CD
+├── config.json             # Global runtime config
+├── requirements.txt        # Python dependencies
+├── .gitignore
+├── LICENSE                 # Research & Commercial License
+└── README.md
+```
+
+---
 
 ## 📄 License
 
-MIT License — see [LICENSE](LICENSE) for full terms.
+**Research & Non-Commercial License** — Free for academic, educational, and non-commercial use with attribution
+
+**Commercial License** — Contact `mauriciomm7[at]outlook[dot]com` for commercial licensing approval
+
+See [LICENSE](LICENSE) for full terms.
+
 
 ---
 
@@ -190,6 +196,8 @@ If you use this tool in academic research, please cite:
   note         = {GitHub repository}
 }
 ```
+
+*Note: Commercial use requires separate licensing. Contact the author for commercial permissions.*
 
 ---
 
