@@ -21,18 +21,21 @@ For researchers who want to **run** the tool:
 
 After downloading from [Releases](https://github.com/mauriciomm7/text_ranking_tool/releases), the executable bundle includes:
 
-```
-TextRankingTool-[Platform]-v1.0-Complete/
-├── TextRankingTool(.exe)       # Executable
-├── config.json                 # Runtime configuration
-├── external_data/              # Input CSVs
-│   ├── mock_data_01.csv
-│   └── revu_data_01.csv
-├── external_exports/           # Output results
-├── internal_data/              # App-generated data
-├── internal_exports/           # App-generated exports
-└── internal_users/             # Per-user sessions
-```
+TextRankingTool-Mac-v1.0-Complete/
+├── Intel/ # For Intel Macs (2020 and earlier)
+│ └── TextRankingTool # Executable for Intel Macs
+├── AppleSilicon/ # For Apple Silicon Macs (M1/M2/M3)
+│ └── TextRankingTool # Executable for Apple Silicon Macs
+├── config.json # Runtime configuration
+├── external_data/ # Input CSVs
+│ ├── mock_data_01.csv
+│ └── revu_data_01.csv
+├── external_exports/ # Output results
+├── internal_data/ # App-generated data
+├── internal_exports/ # App-generated exports
+text
+
+> **Choose the correct executable:** Use `Intel/` folder for Intel-based Macs or `AppleSilicon/` folder for M1/M2/M3 Macs. Check your Mac type: Apple Menu → About This Mac.
 
 ---
 
