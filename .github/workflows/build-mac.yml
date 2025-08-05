@@ -32,7 +32,7 @@ jobs:
     - name: Build Apple Silicon executable
       run: |
         cd packaging/mac
-        pyinstaller text_ranking_tool_mac.spec --distpath dist
+        pyinstaller text_ranking_tool_mac_apple_silicon.spec --distpath dist
         
     - name: Upload Apple Silicon build
       uses: actions/upload-artifact@v4
