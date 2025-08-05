@@ -32,31 +32,44 @@ jobs:
     - name: Build Intel executable
       run: |
         cd packaging/mac
-        pyinstaller text_ranking_tool_mac.spec --target-arch x86_64 --distpath dist/intel
+        pyinstaller text_ranking_tool_mac_intel.spec --distpath dist/intel
         
     - name: Build Apple Silicon executable  
       run: |
         cd packaging/mac
-        pyinstaller text_ranking_tool_mac.spec --distpath dist/apple-silicon
+        pyinstaller text_ranking_tool_mac_apple_silicon.spec --distpath dist/apple-silicon
         
     - name: Create combined distribution package
       run: |
         cd packaging/mac/dist
         
-        # Create main structure
+        # Create main package directory
         mkdir -p TextRankingTool-Mac-${{ steps.get_version.outputs.VERSION }}
         cd TextRankingTool-Mac-${{ steps.get_version.outputs.VERSION }}
         
-        # Copy both executables
-        cp -r ../intel/* ./Intel/
-        cp -r ../apple-silicon/* ./AppleSilicon/
+        # Copy executables to separate folders
+        mkdir -p Intel AppleSilicon
+        cp -r ../intel/* Intel/
+        cp -r ../apple-silicon/* AppleSilicon/
         
         # Create shared directories
         mkdir -p devroot/external_data devroot/external_exports devroot/internal_data devroot/internal_exports devroot/internal_users
         
-        # Add .gitkeep files and config
+        # Create .gitkeep files
         echo "# This file ensures the directory is preserved in archives" > devroot/external_exports/.gitkeep
-        # ... rest of your setup
+        echo "# This file ensures the directory is preserved in archives" > devroot/internal_data/.gitkeep
+        echo "# This file ensures the directory is preserved in archives" > devroot/internal_exports/.gitkeep
+        echo "# This file ensures the directory is preserved in archives" > devroot/internal_users/.gitkeep
+
+        # Copy config and version to root
+        cp ../../../../config.json .
+        cp ../../../../version.txt .
+        
+        # Copy sample CSVs if any exist
+        shopt -s nullglob
+        for f in ../../../../devroot/external_data/*.csv; do
+          cp "$f" devroot/external_data/
+        done
         
     - name: Zip combined package
       run: |

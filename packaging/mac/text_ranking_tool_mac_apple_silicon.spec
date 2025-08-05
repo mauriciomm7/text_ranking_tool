@@ -43,7 +43,7 @@ exe = EXE(
     strip=False,
     upx=False,
     console=True,
-    target_arch=None,
+    target_arch='arm64',
     codesign_identity=None,
     entitlements_file=None,
 )
