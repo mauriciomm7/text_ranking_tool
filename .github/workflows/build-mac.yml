@@ -6,8 +6,8 @@ on:
     branches: [ main ]
 
 jobs:
-  build-mac:
-    runs-on: macos-latest
+  build-mac-universal:
+    runs-on: macos-13  # Use Intel runner
     
     steps:
     - name: Checkout repository
@@ -29,42 +29,41 @@ jobs:
         VERSION=$(cat version.txt)
         echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
         
-    - name: Build Mac executable (single arch)
+    - name: Build Intel executable
       run: |
         cd packaging/mac
-        pyinstaller text_ranking_tool_mac.spec
+        pyinstaller text_ranking_tool_mac.spec --target-arch x86_64 --distpath dist/intel
         
-    - name: Create distribution package
+    - name: Build Apple Silicon executable  
+      run: |
+        cd packaging/mac
+        pyinstaller text_ranking_tool_mac.spec --distpath dist/apple-silicon
+        
+    - name: Create combined distribution package
       run: |
         cd packaging/mac/dist
         
-        # Create devroot directory structure
+        # Create main structure
+        mkdir -p TextRankingTool-Mac-${{ steps.get_version.outputs.VERSION }}
+        cd TextRankingTool-Mac-${{ steps.get_version.outputs.VERSION }}
+        
+        # Copy both executables
+        cp -r ../intel/* ./Intel/
+        cp -r ../apple-silicon/* ./AppleSilicon/
+        
+        # Create shared directories
         mkdir -p devroot/external_data devroot/external_exports devroot/internal_data devroot/internal_exports devroot/internal_users
         
-        # Create .gitkeep files to preserve empty directories
+        # Add .gitkeep files and config
         echo "# This file ensures the directory is preserved in archives" > devroot/external_exports/.gitkeep
-        echo "# This file ensures the directory is preserved in archives" > devroot/internal_data/.gitkeep
-        echo "# This file ensures the directory is preserved in archives" > devroot/internal_exports/.gitkeep
-        echo "# This file ensures the directory is preserved in archives" > devroot/internal_users/.gitkeep
-
-        # Copy config and version info to root level
-        cp ../../../config.json .
-        cp ../../../version.txt .
+        # ... rest of your setup
         
-        # Enable nullglob so non-matching globs expand to nothing
-        shopt -s nullglob
-        
-        # Copy sample CSVs if any exist to devroot/external_data
-        for f in ../../../devroot/external_data/*.csv; do
-          cp "$f" devroot/external_data/
-        done
-        
-    - name: Zip distribution package
+    - name: Zip combined package
       run: |
         cd packaging/mac/dist
-        zip -r ../TextRankingTool-Mac-${{ steps.get_version.outputs.VERSION }}-Complete.zip *
+        zip -r ../TextRankingTool-Mac-${{ steps.get_version.outputs.VERSION }}-Complete.zip TextRankingTool-Mac-${{ steps.get_version.outputs.VERSION }}
 
-    - name: Upload zipped Mac package
+    - name: Upload combined package
       uses: actions/upload-artifact@v4
       with:
         name: TextRankingTool-Mac-${{ steps.get_version.outputs.VERSION }}-Complete
