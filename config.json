@@ -5,9 +5,9 @@
   "external_export_dir": "devroot/external_exports",
   "internal_export_dir": "devroot/internal_exports",
   "internal_users_dir": "devroot/internal_users",
-  "algorithm": "transitive_quick",
+  "algorithm": "recursive_median",
   "available_algorithms": ["recursive_median", "tournament", "transitive_quick"],
-  "default_algorithm": "transitive_quick",
+  "default_algorithm": "recursive_median",
   "user_mapping": {
       "Mauricio MM": "MauricioMM",
       "User Beta": "UserBeta",

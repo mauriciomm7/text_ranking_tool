@@ -38,6 +38,7 @@ devroot/external_exports/*
 devroot/internal_exports/*
 devroot/internal_users/*
 
+
 # Logs and temp files
 *.log
 *.tmp
@@ -51,6 +52,6 @@ warn-*.txt
 TODO.md
 20250802_deployment.txt
 dev_config.json
-release/*.zip
+release/*
 /tools
 /mock
