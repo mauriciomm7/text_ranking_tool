@@ -1,9 +1,7 @@
 # src/text_ranking_tool/algorithms/registry.py
 # type: ignore
-
 from typing import Dict, Type, Any
 from .base import SortingAlgorithm
-
 
 class AlgorithmRegistry:
     """Simple registry for auto-discovering ranking algorithms"""
@@ -12,7 +10,8 @@ class AlgorithmRegistry:
     
     def register(self, algorithm_class: Type[SortingAlgorithm]):
         """Decorator for auto-registering algorithm classes"""
-        self._algorithms[algorithm_class().algorithm_id] = algorithm_class
+        # Using the class attribute directly avoids creating an instance here
+        self._algorithms[algorithm_class.ALGORITHM_ID] = algorithm_class
         return algorithm_class
     
     def get_algorithm(self, algorithm_id: str) -> Type[SortingAlgorithm]:
@@ -25,11 +24,11 @@ class AlgorithmRegistry:
         """List all registered algorithms with metadata"""
         algorithms = {}
         for algo_id, algo_class in self._algorithms.items():
-            instance = algo_class()
+            # Using class attributes directly for efficiency
             algorithms[algo_id] = {
-                "name": instance.name,
-                "description": instance.description,
-                "algorithm_id": instance.algorithm_id
+                "name": algo_class.NAME,
+                "description": algo_class.DESCRIPTION,
+                "algorithm_id": algo_class.ALGORITHM_ID
             }
         return algorithms
     
@@ -41,17 +40,4 @@ class AlgorithmRegistry:
 # Global registry instance
 algorithm_registry = AlgorithmRegistry()
 
-def discover_algorithms():
-    """Import all algorithm modules to trigger registration"""
-    try:
-        from .tournament.tournament_core import TournamentSort
-        from .recursive_median.recursive_median_core import RecursiveMedianSort
-
-        # from .pairwise.pairwise import PairwiseSort
-        # from .merge_sort.merge_sort import MergeSortSort  
-
-    except ImportError as e:
-        print(f"Warning: Could not import algorithm: {e}")
-
-# Auto-discover on import
-discover_algorithms()
+# THE DISCOVERY LOGIC HAS BEEN REMOVED FROM THIS FILE

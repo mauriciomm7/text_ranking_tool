@@ -59,15 +59,21 @@ class RecursiveMedianSort(SortingAlgorithm):
         if pivot_id is None:
             pivot_id = random.choice(ids)
 
+        # CREATE a list of items to be compared against the pivot
+        non_pivots = [text_id for text_id in ids if text_id != pivot_id]
+
+        # THE FIX: Shuffle the list to randomize the comparison order
+        random.shuffle(non_pivots)
+
         above, below = [], []
-        for text_id in ids:
-            if text_id == pivot_id:
-                continue
+        # Loop over the new, shuffled list
+        for text_id in non_pivots:
             self.comparison_count += 1
             if self.ask_if_more_negative(text_id, pivot_id):
                 below.append(text_id)
             else:
                 above.append(text_id)
+
 
         sorted_below = self._median_recursive_sort(below, depth + 1, use_valence_pivot)
         sorted_above = self._median_recursive_sort(above, depth + 1, use_valence_pivot)

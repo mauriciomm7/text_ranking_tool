@@ -19,6 +19,7 @@ __pycache__/
 *.pyd
 .Python
 *.so
+.pytest_cache
 
 # IDE files
 .vscode/
@@ -50,3 +51,6 @@ warn-*.txt
 TODO.md
 20250802_deployment.txt
 dev_config.json
+release/*.zip
+/tools
+/mock

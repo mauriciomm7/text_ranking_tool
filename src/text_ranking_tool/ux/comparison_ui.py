@@ -109,70 +109,75 @@ def get_tournament_comparison_choice(comparison_data: Dict[str, Any]) -> str:
 
 
 def get_recursive_median_comparison_choice(comparison_data: Dict[str, Any]) -> str:
-    """Recursive median UI: Your proven PIVOT vs COMPARISON TEXT paradigm"""
+    """Recursive median UI: Standardized A vs B direct selection."""
     
     console = Console()
     
-    # SWAP THE ROLES - text2 is actually the pivot, text1 is the comparison
-    pivot_text = comparison_data["text2"]      # The text that stays consistent  
-    comparison_text = comparison_data["text1"] # The text that changes each comparison
+    # Map internal roles to a simple A/B presentation
+    text_a_data = comparison_data["text1"] # This is the "comparison text"
+    text_b_data = comparison_data["text2"] # This is the "pivot"
     comparison_num = comparison_data["comparison_number"]
     
-    if DEBUG:
-        print(f"DEBUG UI: Received text1 (COMPARISON) = {comparison_text['id']}")
-        print(f"DEBUG UI: Received text2 (PIVOT) = {pivot_text['id']}")
-        print(f"DEBUG UI: PIVOT text preview: {pivot_text['text'][:50]}...")
-        print(f"DEBUG UI: COMPARISON text preview: {comparison_text['text'][:50]}...")
-    
     _clear_screen()
+        
+    if DEBUG:
+        print(f"DEBUG UI: Received text1 (COMPARISON) = {text_a_data['id']}")
+        print(f"DEBUG UI: Received text2 (PIVOT) = {text_b_data['id']}")
+        print(f"DEBUG UI: PIVOT text preview: {text_b_data['text'][:50]}...")
+        print(f"DEBUG UI: COMPARISON text preview: {text_a_data['text'][:50]}...")
     
-    # Recursive median header
-    console.rule("[dim violet]Recursive Median Sort[/dim violet]", style="dim violet")
-    console.print(f"[dim violet dim]Comparison #{comparison_num}[/dim violet dim]", justify="center")
-    console.rule(style="dim violet")
-    
-    # PIVOT panel (now using pivot_text)
-    pivot_panel = Panel(
-        Align.center(pivot_text["text"]),
-        title="[bold white]PIVOT[/bold white]",
-        border_style="dim white",
+    # Header keeps its unique violet color for algorithm identity
+    console.rule("[dim violet]Recursive Median Sort[/dim violet]", style="violet")
+    console.print(f"[dim violet]Comparison #{comparison_num}[/dim violet]", justify="center")
+    console.rule(style="violet")
+
+    # Panel titles with optional debug info, consistent with TransitiveQuickRank
+    title_a = "[bold turquoise2]TEXT A[/bold turquoise2]"
+    title_b = "[bold gold3]TEXT B[/bold gold3]"
+    if DEBUG:
+        # Use a dim, grayish color for the role hints
+        title_a += " [dim grey53](Comparison)[/dim grey53]"
+        title_b += " [dim grey53](Pivot)[/dim grey53]"
+
+    # Panel A (Comparison Text)
+    panel_a = Panel(
+        Align.center(text_a_data["text"]),
+        title=title_a,
+        border_style="dim turquoise2",
+        style="turquoise2",
         padding=(1, 2)
     )
-    
-    # COMPARISON TEXT panel (now using comparison_text)
-    comparison_panel = Panel(
-        comparison_text["text"],
-        title="[bold cyan]COMPARISON TEXT[/bold cyan]",
-        border_style="cyan",
-        style="cyan",
+
+    # Panel B (Pivot Text)
+    panel_b = Panel(
+        Align.center(text_b_data["text"]),
+        title=title_b,
+        border_style="dim gold3",
+        style="gold3",
         padding=(1, 2)
     )
-    
-    console.print(pivot_panel)
+
+    console.print(panel_a)
     console.print()
-    console.print(comparison_panel)
+    console.print(panel_b)
     console.print()
-    
-    # Your exact instruction styling
+
+    # Standardized question
     instruction = Text()
-    instruction.append("Is the ", style="white")
-    instruction.append("COMPARISON TEXT", style="bold cyan")
-    instruction.append(" more ", style="white")
-    instruction.append("POSITIVE", style="dim green")
-    instruction.append(" or more ", style="white")
-    instruction.append("NEGATIVE", style="dim red")
+    instruction.append("Which text is ", style="white")
+    instruction.append("MORE NEGATIVE", style="indian_red")
     instruction.append("?", style="white")
     console.print(instruction)
-    
-    # Your exact input options
+
+    # Standardized A/B input options
     options = Text()
     options.append("Enter: ", style="white")
-    options.append("[+] or [positive]", style="bold green")
+    options.append("[A] or [a]", style="bold turquoise2")
     options.append(" | ", style="white")
-    options.append("[-] or [negative]", style="bold red")
+    options.append("[B] or [b]", style="bold gold3")
     console.print(options)
     
-    # Your exact special commands
+    # Standardized special commands
     extra_options = Text()
     extra_options.append("Special: ", style="dim")
     extra_options.append("[u] undo", style="dim violet")
@@ -181,15 +186,15 @@ def get_recursive_median_comparison_choice(comparison_data: Dict[str, Any]) -> s
     console.print(extra_options)
     console.print()
     
-    # Handle input with corrected return logic
+    # Handle input (returns the ID of the more negative text)
     while True:
         choice = Prompt.ask("Your choice").lower().strip()
-        if choice in ["+", "positive"]:
-            console.print("[green]✓ COMPARISON TEXT is more positive (PIVOT is more negative)[/green]\n")
-            return pivot_text["id"]  # Return the PIVOT's id (text2)
-        elif choice in ["-", "negative"]:
-            console.print("[red]✓ COMPARISON TEXT is more negative[/red]\n")
-            return comparison_text["id"]  # Return the COMPARISON TEXT's id (text1)
+        if choice in ["a"]:
+            console.print("[red]✓ Text A selected (more negative)[/red]\n")
+            return text_a_data["id"]
+        elif choice in ["b"]:
+            console.print("[green]✓ Text B selected (more negative)[/green]\n")
+            return text_b_data["id"]
         elif choice == "u":
             console.print("[yellow]⟲ Undoing last comparison...[/yellow]")
             return "UNDO"
@@ -197,7 +202,7 @@ def get_recursive_median_comparison_choice(comparison_data: Dict[str, Any]) -> s
             console.print("[yellow]Exiting recursive median sort...[/yellow]")
             raise KeyboardInterrupt("User requested quit")
         else:
-            console.print("[red]Invalid choice. Try: +, -, positive, negative, u, or q[/red]")
+            console.print("[red]Invalid choice. Try: a, b, u, or q[/red]")
 
 
 def get_generic_comparison_choice(comparison_data: Dict[str, Any]) -> str:
@@ -248,6 +253,99 @@ def get_generic_comparison_choice(comparison_data: Dict[str, Any]) -> str:
         elif choice == "q":
             console.print("[yellow]Exiting comparison...[/yellow]")
             raise KeyboardInterrupt("User requested quit")
+
+def get_transitive_quick_comparison_choice(comparison_data: Dict[str, Any]) -> str:
+    """Transitive Quick UI: Simple A vs B direct selection, with subtle internal role hints."""
+    
+    console = Console()
+    
+    # Internally, we know the roles, but we'll present them as A and B
+    text_a_data = comparison_data["text1"] # This is the "comparison text"
+    text_b_data = comparison_data["text2"] # This is the "anchor"
+    comparison_num = comparison_data["comparison_number"]
+    
+    _clear_screen()
+    
+    # Header
+    dim_magenta = "dim magenta"
+
+    console.rule("[dim magenta]Transitive Quick Rank[/]", style=dim_magenta)
+    console.print(f"[dim magenta]Comparison #{comparison_num}[/]", justify="center")
+    console.rule(style=dim_magenta)
+
+
+    # Panel titles with optional debug info for your testing
+    title_a = "[bold turquoise2]TEXT A[/bold turquoise2]"
+    title_b = "[bold gold3]TEXT B[/bold gold3]"
+    if DEBUG:
+        # Use a dim, grayish color for the role hints
+        title_a += " [dim grey53](Comparison)[/dim grey53]"
+        title_b += " [dim grey53](Anchor)[/dim grey53]"
+
+    # Panel A
+    panel_a = Panel(
+        Align.center(text_a_data["text"]),
+        title=title_a,
+        border_style="dim turquoise2",
+        style="turquoise2",
+        padding=(1, 2)
+    )
+
+    # Panel B
+    panel_b = Panel(
+        Align.center(text_b_data["text"]),
+        title=title_b,
+        border_style="dim gold3",
+        style="gold3",
+        padding=(1, 2)
+    )
+
+    console.print(panel_a)
+    console.print()
+    console.print(panel_b)
+    console.print()
+
+    # Simple, consistent question
+    instruction = Text()
+    instruction.append("Which text is ", style="white")
+    instruction.append("MORE NEGATIVE", style="red")
+    instruction.append("?", style="white")
+    console.print(instruction)
+
+    # Simple A/B input options
+    options = Text()
+    options.append("Enter: ", style="white")
+    options.append("[A] or [a]", style="bold turquoise2")
+    options.append(" | ", style="white")
+    options.append("[B] or [b]", style="bold gold3")
+    console.print(options)
+    
+    # Special commands remain the same
+    extra_options = Text()
+    extra_options.append("Special: ", style="dim")
+    extra_options.append("[u] undo", style="dim violet")
+    extra_options.append(" | ", style="dim")
+    extra_options.append("[q] quit", style="dim blue")
+    console.print(extra_options)
+    console.print()
+    
+    # Handle input (returns the ID of the more negative text)
+    while True:
+        choice = Prompt.ask("Your choice").lower().strip()
+        if choice in ["a"]:
+            console.print("[red]✓ Text A selected (more negative)[/red]\n")
+            return text_a_data["id"]
+        elif choice in ["b"]:
+            console.print("[green]✓ Text B selected (more negative)[/green]\n")
+            return text_b_data["id"]
+        elif choice == "u":
+            console.print("[yellow]⟲ Undoing last comparison...[/yellow]")
+            return "UNDO"
+        elif choice == "q":
+            console.print("[yellow]Exiting transitive ranking...[/yellow]")
+            raise KeyboardInterrupt("User requested quit")
+        else:
+            console.print("[red]Invalid choice. Try: a, b, u, or q[/red]")
 
 def _clear_screen():
     """Clear screen helper"""

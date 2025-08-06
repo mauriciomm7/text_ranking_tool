@@ -154,11 +154,14 @@ class ComparisonEngine:
         elif CONFIGURED_ALGORITHM == "recursive_median":
             from ..ux.comparison_ui import get_recursive_median_comparison_choice
             return get_recursive_median_comparison_choice(comparison_data)
+        elif CONFIGURED_ALGORITHM == "transitive_quick":  # ← Add this
+            from ..ux.comparison_ui import get_transitive_quick_comparison_choice
+            return get_transitive_quick_comparison_choice(comparison_data)
         else:
             # Fallback to generic UI
             from ..ux.comparison_ui import get_generic_comparison_choice
             return get_generic_comparison_choice(comparison_data)
-    
+
     def _cache_comparison_result(self, text_id_1: str, text_id_2: str, result: bool):
         """Cache comparison result and save to session"""
         # Store in memory
