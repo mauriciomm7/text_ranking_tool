@@ -3,7 +3,7 @@ name: Build Mac Executable
 on:
   workflow_dispatch:
   push:
-    branches: [ main, feature/dual-architecture-build]
+    branches: [ main, feature/fix-new-algo-quicker]
 
 jobs:
   build-apple-silicon:
