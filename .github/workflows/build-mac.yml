@@ -3,7 +3,7 @@ name: Build Mac Executable
 on:
   workflow_dispatch:
   push:
-    branches: [ main, feature/fix-new-algo-quicker]
+    branches: [ main]
 
 jobs:
   build-apple-silicon:
@@ -12,6 +12,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
       
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
@@ -46,6 +48,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
       
     - name: Set up Python 3.11
       uses: actions/setup-python@v4
@@ -81,6 +85,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        ref: ${{ github.sha }}
       
     - name: Read version number
       id: get_version
