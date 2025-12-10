@@ -43,7 +43,7 @@ jobs:
         path: packaging/mac/dist/
 
   build-intel:
-    runs-on: macos-13  # Intel runner that worked
+    runs-on: macos-15-intel  # Intel runner that worked
     
     steps:
     - name: Checkout repository
