@@ -7,6 +7,7 @@ from rich.text import Text
 from rich.align import Align
 from rich.prompt import Prompt
 from ..config.constants import DEBUG
+from ..utils.text_formatters import format_text
 
 def get_user_comparison_choice(comparison_data: Dict[str, Any]) -> str:
     """Dispatch to algorithm-specific comparison UI"""
@@ -18,7 +19,6 @@ def get_user_comparison_choice(comparison_data: Dict[str, Any]) -> str:
     elif algorithm == "recursive_median":
         return get_recursive_median_comparison_choice(comparison_data)
     else:
-        # Fallback to generic comparison
         return get_generic_comparison_choice(comparison_data)
 
 def get_tournament_comparison_choice(comparison_data: Dict[str, Any]) -> str:
@@ -29,29 +29,25 @@ def get_tournament_comparison_choice(comparison_data: Dict[str, Any]) -> str:
     text2 = comparison_data["text2"] 
     comparison_num = comparison_data["comparison_number"]
     
-    # Get tournament context
     context = comparison_data.get("bracket_info", {})
     current_round = context.get("current_round", 1)
     
     _clear_screen()
     
-    # Tournament header (consistent with recursive median styling)
     console.rule("[dim dark_sea_green]Tournament Bracket[/dim dark_sea_green]", style="dim dark_sea_green")
     console.print(f"[dim dark_sea_green]Round {current_round} - Match #{comparison_num}[/dim dark_sea_green]", justify="center")
     console.rule(style="dim dark_sea_green")
 
-    # Competitor A panel (standardized styling)
     competitor_a_panel = Panel(
-        Align.center(text1["text"]),
+        Align.center(format_text(text1["text"])),  # ← CHANGED
         title="[bold turquoise2]COMPETITOR A[/bold turquoise2]",
         border_style="dim turquoise2",
         style="turquoise2",
         padding=(1, 2)
     )
 
-    # Competitor B panel (standardized styling)
     competitor_b_panel = Panel(
-        Align.center(text2["text"],),
+        Align.center(format_text(text2["text"])),  # ← CHANGED
         title="[bold gold3]COMPETITOR B[/bold gold3]",
         border_style="dim gold3",
         style="gold3",
@@ -63,14 +59,12 @@ def get_tournament_comparison_choice(comparison_data: Dict[str, Any]) -> str:
     console.print(competitor_b_panel)
     console.print()
 
-    # Tournament-specific instructions (consistent formatting)
     instruction = Text()
     instruction.append("Which text is ", style="white")
     instruction.append("MORE NEGATIVE", style="indian_red")
     instruction.append(" ?", style="white ")
     console.print(instruction)
 
-    # Input options (standardized format)
     options = Text()
     options.append("Enter: ", style="white")
     options.append("[A] or [a]", style="bold turquoise2")
@@ -78,8 +72,6 @@ def get_tournament_comparison_choice(comparison_data: Dict[str, Any]) -> str:
     options.append("[B] or [b]", style="bold gold3")
     console.print(options)
 
-    
-    # Special commands (consistent with recursive median)
     extra_options = Text()
     extra_options.append("Special: ", style="dim")
     extra_options.append("[u] undo", style="dim violet")
@@ -88,7 +80,6 @@ def get_tournament_comparison_choice(comparison_data: Dict[str, Any]) -> str:
     console.print(extra_options)
     console.print()
     
-    # Handle tournament input (with undo support)
     while True:
         choice = Prompt.ask("Your choice").lower().strip()
         
@@ -113,44 +104,42 @@ def get_recursive_median_comparison_choice(comparison_data: Dict[str, Any]) -> s
     
     console = Console()
     
-    # Map internal roles to a simple A/B presentation
-    text_a_data = comparison_data["text1"] # This is the "comparison text"
-    text_b_data = comparison_data["text2"] # This is the "pivot"
+    text_a_data = comparison_data["text1"]
+    text_b_data = comparison_data["text2"]
     comparison_num = comparison_data["comparison_number"]
     
     _clear_screen()
         
     if DEBUG:
+        from rich.console import Console as _C
+        formatted_a = format_text(text_a_data["text"])
+        _C().print(f"[dim]FORMATTER DEBUG — plain: {repr(formatted_a.plain[:60])}[/dim]")
+        _C().print(f"[dim]FORMATTER DEBUG — spans: {formatted_a._spans[:5]}[/dim]")
         print(f"DEBUG UI: Received text1 (COMPARISON) = {text_a_data['id']}")
         print(f"DEBUG UI: Received text2 (PIVOT) = {text_b_data['id']}")
         print(f"DEBUG UI: PIVOT text preview: {text_b_data['text'][:50]}...")
         print(f"DEBUG UI: COMPARISON text preview: {text_a_data['text'][:50]}...")
     
-    # Header keeps its unique violet color for algorithm identity
     console.rule("[dim violet]Recursive Median Sort[/dim violet]", style="violet")
     console.print(f"[dim violet]Comparison #{comparison_num}[/dim violet]", justify="center")
     console.rule(style="violet")
 
-    # Panel titles with optional debug info, consistent with TransitiveQuickRank
     title_a = "[bold turquoise2]TEXT A[/bold turquoise2]"
     title_b = "[bold gold3]TEXT B[/bold gold3]"
     if DEBUG:
-        # Use a dim, grayish color for the role hints
         title_a += " [dim grey53](Comparison)[/dim grey53]"
         title_b += " [dim grey53](Pivot)[/dim grey53]"
 
-    # Panel A (Comparison Text)
     panel_a = Panel(
-        Align.center(text_a_data["text"]),
+        Align.center(format_text(text_a_data["text"])),  # ← CHANGED
         title=title_a,
         border_style="dim turquoise2",
         style="turquoise2",
         padding=(1, 2)
     )
 
-    # Panel B (Pivot Text)
     panel_b = Panel(
-        Align.center(text_b_data["text"]),
+        Align.center(format_text(text_b_data["text"])),  # ← CHANGED
         title=title_b,
         border_style="dim gold3",
         style="gold3",
@@ -162,14 +151,12 @@ def get_recursive_median_comparison_choice(comparison_data: Dict[str, Any]) -> s
     console.print(panel_b)
     console.print()
 
-    # Standardized question
     instruction = Text()
     instruction.append("Which text is ", style="white")
     instruction.append("MORE NEGATIVE", style="indian_red")
     instruction.append("?", style="white")
     console.print(instruction)
 
-    # Standardized A/B input options
     options = Text()
     options.append("Enter: ", style="white")
     options.append("[A] or [a]", style="bold turquoise2")
@@ -177,7 +164,6 @@ def get_recursive_median_comparison_choice(comparison_data: Dict[str, Any]) -> s
     options.append("[B] or [b]", style="bold gold3")
     console.print(options)
     
-    # Standardized special commands
     extra_options = Text()
     extra_options.append("Special: ", style="dim")
     extra_options.append("[u] undo", style="dim violet")
@@ -186,7 +172,6 @@ def get_recursive_median_comparison_choice(comparison_data: Dict[str, Any]) -> s
     console.print(extra_options)
     console.print()
     
-    # Handle input (returns the ID of the more negative text)
     while True:
         choice = Prompt.ask("Your choice").lower().strip()
         if choice in ["a"]:
@@ -219,16 +204,15 @@ def get_generic_comparison_choice(comparison_data: Dict[str, Any]) -> str:
     console.print(f"[bold cyan]Text Comparison #{comparison_num}[/bold cyan]")
     console.print("="*80 + "\n")
     
-    # Simple A vs B panels
     panel_a = Panel(
-        Align.center(text1["text"]),
+        Align.center(format_text(text1["text"])),  # ← CHANGED
         title=f"[bold green]TEXT A[/bold green] (ID: {text1['id']})",
         border_style="green",
         padding=(1, 2)
     )
     
     panel_b = Panel(
-        Align.center(text2["text"]),
+        Align.center(format_text(text2["text"])),  # ← CHANGED
         title=f"[bold red]TEXT B[/bold red] (ID: {text2['id']})",
         border_style="red",
         padding=(1, 2)
@@ -255,45 +239,37 @@ def get_generic_comparison_choice(comparison_data: Dict[str, Any]) -> str:
             raise KeyboardInterrupt("User requested quit")
 
 def get_transitive_quick_comparison_choice(comparison_data: Dict[str, Any]) -> str:
-    """Transitive Quick UI: Simple A vs B direct selection, with subtle internal role hints."""
+    """Transitive Quick UI: Simple A vs B direct selection."""
     
     console = Console()
     
-    # Internally, we know the roles, but we'll present them as A and B
-    text_a_data = comparison_data["text1"] # This is the "comparison text"
-    text_b_data = comparison_data["text2"] # This is the "anchor"
+    text_a_data = comparison_data["text1"]
+    text_b_data = comparison_data["text2"]
     comparison_num = comparison_data["comparison_number"]
     
     _clear_screen()
     
-    # Header
     dim_magenta = "dim magenta"
-
     console.rule("[dim magenta]Transitive Quick Rank[/]", style=dim_magenta)
     console.print(f"[dim magenta]Comparison #{comparison_num}[/]", justify="center")
     console.rule(style=dim_magenta)
 
-
-    # Panel titles with optional debug info for your testing
     title_a = "[bold turquoise2]TEXT A[/bold turquoise2]"
     title_b = "[bold gold3]TEXT B[/bold gold3]"
     if DEBUG:
-        # Use a dim, grayish color for the role hints
         title_a += " [dim grey53](Comparison)[/dim grey53]"
         title_b += " [dim grey53](Anchor)[/dim grey53]"
 
-    # Panel A
     panel_a = Panel(
-        Align.center(text_a_data["text"]),
+        Align.center(format_text(text_a_data["text"])),  # ← CHANGED
         title=title_a,
         border_style="dim turquoise2",
         style="turquoise2",
         padding=(1, 2)
     )
 
-    # Panel B
     panel_b = Panel(
-        Align.center(text_b_data["text"]),
+        Align.center(format_text(text_b_data["text"])),  # ← CHANGED
         title=title_b,
         border_style="dim gold3",
         style="gold3",
@@ -305,14 +281,12 @@ def get_transitive_quick_comparison_choice(comparison_data: Dict[str, Any]) -> s
     console.print(panel_b)
     console.print()
 
-    # Simple, consistent question
     instruction = Text()
     instruction.append("Which text is ", style="white")
     instruction.append("MORE NEGATIVE", style="red")
     instruction.append("?", style="white")
     console.print(instruction)
 
-    # Simple A/B input options
     options = Text()
     options.append("Enter: ", style="white")
     options.append("[A] or [a]", style="bold turquoise2")
@@ -320,7 +294,6 @@ def get_transitive_quick_comparison_choice(comparison_data: Dict[str, Any]) -> s
     options.append("[B] or [b]", style="bold gold3")
     console.print(options)
     
-    # Special commands remain the same
     extra_options = Text()
     extra_options.append("Special: ", style="dim")
     extra_options.append("[u] undo", style="dim violet")
@@ -329,7 +302,6 @@ def get_transitive_quick_comparison_choice(comparison_data: Dict[str, Any]) -> s
     console.print(extra_options)
     console.print()
     
-    # Handle input (returns the ID of the more negative text)
     while True:
         choice = Prompt.ask("Your choice").lower().strip()
         if choice in ["a"]:

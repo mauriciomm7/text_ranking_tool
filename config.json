@@ -18,5 +18,9 @@
       "User Beta": "bright_magenta",
       "User Alpha": "bright_green"
   },
-  "required_columns": ["id", "valence", "ranking", "text"]
+  "required_columns": ["id", "valence", "ranking", "text"],
+  "text_formatting": {
+    "type": "strike", 
+    "patterns_file": "devroot/external_data/mock_strike_words.txt"
+  }
 }

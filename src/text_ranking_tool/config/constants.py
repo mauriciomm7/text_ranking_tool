@@ -3,7 +3,7 @@
 import json
 import sys
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 # DEBUG FLAG
 DEBUG = False
@@ -51,6 +51,10 @@ USER_COLORS = _config["user_colors"]
 
 # CSV requirements from config - NO DEFAULTS
 REQUIRED_COLUMNS = _config["required_columns"]
+
+# ── TEXT FORMATTING (optional) ────────────────
+_text_formatting = _config.get("text_formatting")
+TEXT_FORMATTING_RULE: Optional[Dict[str, Any]] = _text_formatting if _text_formatting else None
 
 # Helper functions
 def get_user_id(display_name: str) -> str:
