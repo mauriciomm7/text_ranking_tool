@@ -62,8 +62,13 @@ jobs:
         
         # Copy sample CSVs to devroot\external_data if any exist
         if (Test-Path ..\..\..\devroot\external_data\*.csv) {
-          Copy-Item ..\..\..\devroot\external_data\*.csv devroot\external_data\
+        Copy-Item ..\..\..\devroot\external_data\*.csv devroot\external_data\
         }
+        # Copy sample TXTs to devroot\external_data if any exist
+        if (Test-Path ..\..\..\devroot\external_data\*.txt) {
+        Copy-Item ..\..\..\devroot\external_data\*.txt devroot\external_data\
+        }
+
 
     - name: Zip distribution package
       shell: pwsh

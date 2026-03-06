@@ -6,12 +6,8 @@ from rich.text import Text
 
 from ..config.constants import TEXT_FORMATTING_RULE, resolve_path
 
-
 def _load_patterns_file(path_str: str) -> Optional[List[str]]:
-    """
-    Load patterns from a .txt file, one word/phrase per line.
-    Returns None if file cannot be loaded — app continues unformatted.
-    """
+    """Load raw patterns from .txt — one per line, optional trailing *."""
     try:
         file_path = resolve_path(path_str)
         with open(file_path, 'r', encoding='utf-8-sig') as f:
@@ -32,19 +28,19 @@ def _load_patterns_file(path_str: str) -> Optional[List[str]]:
         return None
 
 
-def _stylize_matches(text_obj: Text, patterns: List[str], style: str) -> Text:
-    """Core engine: one compiled regex pass, apply Rich style to all matches."""
+def _stylize_matches(text_obj: Text, patterns: Optional[List[str]], style: str) -> Text:
+    """Core engine: compile wildcard patterns, apply Rich style to all matches."""
     if not patterns:
         return text_obj
-    raw = text_obj.plain  # ← was str(text_obj)
-    combined = re.compile(
-        r"\b(" + "|".join(map(re.escape, patterns)) + r")\b",
-        re.IGNORECASE,
-    )
-    for match in combined.finditer(raw):
-        text_obj.stylize(style, match.start(), match.end())
+    raw = text_obj.plain
+    for stem in patterns:
+        if stem.endswith('*'):
+            pat = re.compile(rf'\b{re.escape(stem[:-1])}.*?\b', re.IGNORECASE)
+        else:
+            pat = re.compile(rf'\b{re.escape(stem)}\b', re.IGNORECASE)
+        for match in pat.finditer(raw):
+            text_obj.stylize(style, match.start(), match.end())
     return text_obj
-
 
 
 def _apply_strike(text_obj: Text, patterns: List[str]) -> Text:

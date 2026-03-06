@@ -43,7 +43,7 @@ jobs:
         path: packaging/mac/dist/
 
   build-intel:
-    runs-on: macos-15-intel  # Intel runner that worked
+    runs-on: macos-13  # Intel runner that worked
     
     steps:
     - name: Checkout repository
@@ -132,6 +132,11 @@ jobs:
         # Copy sample CSVs if any exist
         shopt -s nullglob
         for f in ../devroot/external_data/*.csv; do
+          [ -f "$f" ] && cp "$f" devroot/external_data/
+        done
+        
+        # Copy sample txt files if any exist
+        for f in ../devroot/external_data/*.txt; do
           [ -f "$f" ] && cp "$f" devroot/external_data/
         done
         
