@@ -385,6 +385,7 @@ court systems of the E.E.C.
 court systems of the EEC
 court systems of the EU
 court*
+Court
 courts and tribunals that can refer
 courts and tribunals that must refer
 Courts of First Instance
@@ -1603,6 +1604,8 @@ treaties entered into by the EU
 treaties relating exclusively to
 treaties with implications for
 treaty
+Treaty
+Treaties
 Treaty bas*
 Treaty establishing a Constitution for Europe
 Treaty framework*

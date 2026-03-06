@@ -29,18 +29,35 @@ def _load_patterns_file(path_str: str) -> Optional[List[str]]:
 
 
 def _stylize_matches(text_obj: Text, patterns: Optional[List[str]], style: str) -> Text:
-    """Core engine: compile wildcard patterns, apply Rich style to all matches."""
+    """Core engine: compile wildcard patterns, apply Rich style to all matches.
+    Case-sensitive, handles multi-word phrases correctly."""
     if not patterns:
         return text_obj
+    
     raw = text_obj.plain
     for stem in patterns:
         if stem.endswith('*'):
-            pat = re.compile(rf'\b{re.escape(stem[:-1])}.*?\b', re.IGNORECASE)
+            prefix = stem[:-1]
+            if ' ' in prefix:
+                # Multi-word phrase with wildcard on last word only
+                words = prefix.rsplit(' ', 1)  # Split on last space
+                fixed_prefix = words[0]
+                last_word_prefix = words[1]
+                # Match: \b fixed_prefix last_word_prefix\w*
+                pat_str = rf'\b{re.escape(fixed_prefix)}\s+{re.escape(last_word_prefix)}\w*'
+            else:
+                # Single word wildcard
+                pat_str = rf'\b{re.escape(prefix)}\w*'
         else:
-            pat = re.compile(rf'\b{re.escape(stem)}\b', re.IGNORECASE)
+            # Exact phrase match
+            pat_str = rf'\b{re.escape(stem)}\b'
+        
+        pat = re.compile(pat_str)
         for match in pat.finditer(raw):
             text_obj.stylize(style, match.start(), match.end())
+    
     return text_obj
+
 
 
 def _apply_strike(text_obj: Text, patterns: List[str]) -> Text:
